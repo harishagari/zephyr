@@ -55,22 +55,22 @@
 		intc0: interrupt-controller@70 {
 			compatible = "microchip,dspic33-intc";
 			reg = <0x70 0x138>;
-			ie-offset = <0xC0>;
+			ie-offset = <0xc0>;
 			if-offset = <0x90>;
 			interrupt-controller;
 			#address-cells = <0>;
 			#interrupt-cells = <2>;
 		};
 
-		timer1: timer@1CE0 {
+		timer1: timer@1ce0 {
 			compatible = "microchip,dspic33-timer";
-			reg = <0x1CE0 0xC>;
+			reg = <0x1ce0 0xc>;
 			clock-frequency = <4000000>;
 			prescaler = <8>;
 			interrupt-parent = <&intc0>;
 			interrupts = <48 1>;
 			label = "TIMER_1";
-			status = "okay";
+			status = "disabled";
 		};
 
 		uart0: uart@1700 {
@@ -112,9 +112,50 @@
 			status = "disabled";
 		};
 
+		i2c0: i2c@1880 {
+			compatible = "microchip,dspic33-i2c";
+			reg = <0x1880 0x50>;
+			interrupts = <85 1>, <86 1>, <87 1>, <88 1>;
+			interrupt-names = "err", "gen", "rx", "tx";
+			interrupt-parent = <&intc0>;
+			pinctrl-0 = <&i2c0_sda_default &i2c0_scl_default>;
+			pinctrl-names = "default";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		i2c1: i2c@18d0 {
+			compatible = "microchip,dspic33-i2c";
+			reg = <0x18d0 0x50>;
+			interrupts = <89 1>, <90 1>, <91 1>, <92 1>;
+			interrupt-names = "err", "gen", "rx", "tx";
+			interrupt-parent = <&intc0>;
+			pinctrl-0 = <&i2c1_sda_default &i2c1_scl_default>;
+			pinctrl-names = "default";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		i2c2: i2c@1920 {
+			compatible = "microchip,dspic33-i2c";
+			reg = <0x1920 0x50>;
+			interrupts = <93 1>, <94 1>, <95 1>, <96 1>;
+			interrupt-names = "err", "gen", "rx", "tx";
+			interrupt-parent = <&intc0>;
+			pinctrl-0 = <&i2c2_sda_default &i2c2_scl_default>;
+			pinctrl-names = "default";
+			scl-gpios = <&gpioc 6 0>;
+			sda-gpios = <&gpioc 7 0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
 		pinctrl: pin-controller@200 {
 			compatible = "microchip,dspic33-pinctrl";
-			reg = <0x0200 0x37D0>;
+			reg = <0x0200 0x37d0>;
 			#address-cells = <1>;
 			#size-cells = <1>;
 			status = "okay";
@@ -124,7 +165,7 @@
 				reg = <0x200 0x14>;
 				gpio-controller;
 				#gpio-cells = <2>;
-				status = "okay";
+				status = "disabled";
 			};
 
 			gpiob: gpio@214 {
@@ -132,7 +173,7 @@
 				reg = <0x214 0x14>;
 				gpio-controller;
 				#gpio-cells = <2>;
-				status = "okay";
+				status = "disabled";
 			};
 
 			gpioc: gpio@228 {
@@ -140,15 +181,15 @@
 				reg = <0x228 0x14>;
 				gpio-controller;
 				#gpio-cells = <2>;
-				status = "okay";
+				status = "disabled";
 			};
 
-			gpiod: gpio@23C {
+			gpiod: gpio@23c {
 				compatible = "microchip,dspic-gpio";
-				reg = <0x23C 0x14>;
+				reg = <0x23c 0x14>;
 				gpio-controller;
 				#gpio-cells = <2>;
-				status = "okay";
+				status = "disabled";
 			};
 
 			gpioe: gpio@250 {
@@ -156,7 +197,7 @@
 				reg = <0x250 0x14>;
 				gpio-controller;
 				#gpio-cells = <2>;
-				status = "okay";
+				status = "disabled";
 			};
 
 			gpiof: gpio@264 {
@@ -164,7 +205,7 @@
 				reg = <0x264 0x14>;
 				gpio-controller;
 				#gpio-cells = <2>;
-				status = "okay";
+				status = "disabled";
 			};
 
 			gpiog: gpio@278 {
@@ -172,15 +213,15 @@
 				reg = <0x278 0x14>;
 				gpio-controller;
 				#gpio-cells = <2>;
-				status = "okay";
+				status = "disabled";
 			};
 
-			gpioh: gpio@28C {
+			gpioh: gpio@28c {
 				compatible = "microchip,dspic-gpio";
-				reg = <0x28C 0x14>;
+				reg = <0x28c 0x14>;
 				gpio-controller;
 				#gpio-cells = <2>;
-				status = "okay";
+				status = "disabled";
 			};
 
 			uart0_tx_default: uart0_tx_default {
@@ -205,6 +246,30 @@
 
 			uart2_rx_default: uart2_rx_default {
 				pinmux = <DSPIC33_PINMUX(PORT_B, 1, U3RX)>;
+			};
+
+			i2c0_sda_default: i2c0_sda_default {
+				pinmux = <DSPIC33_PINMUX(PORT_B, 3, FIXED_FUNC_PU)>;
+			};
+
+			i2c0_scl_default: i2c0_scl_default {
+				pinmux = <DSPIC33_PINMUX(PORT_B, 4, FIXED_FUNC_PU)>;
+			};
+
+			i2c1_sda_default: i2c1_sda_default {
+				pinmux = <DSPIC33_PINMUX(PORT_A, 7, FIXED_FUNC_PU)>;
+			};
+
+			i2c1_scl_default: i2c1_scl_default {
+				pinmux = <DSPIC33_PINMUX(PORT_A, 0, FIXED_FUNC_PU)>;
+			};
+
+			i2c2_sda_default: i2c2_sda_default {
+				pinmux = <DSPIC33_PINMUX(PORT_C, 7, FIXED_FUNC_PU)>;
+			};
+
+			i2c2_scl_default: i2c2_scl_default {
+				pinmux = <DSPIC33_PINMUX(PORT_C, 6, FIXED_FUNC_PU)>;
 			};
 		};
 	};

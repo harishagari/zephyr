@@ -1,0 +1,14 @@
+common:
+  tags:
+    - drivers
+    - i2c
+  depends_on:
+    - i2c
+
+tests:
+  drivers.i2c.dspic33.api:
+    platform_allow:
+      - dspic33a_curiosity/p33ak512mps512
+      - dspic33a_curiosity/p33ak128mc106
+      - dspic33a_curiosity/p33ak256mps306
+    harness: ztest

@@ -7,6 +7,8 @@
 
 #define DT_DRV_COMPAT microchip_dspic33_pinctrl
 
+#define CNPU_BASE 0x3648
+#define CNPU_STRIDE 0x24
 
 #define MCHP_DSPIC_GET_PORT_ADDR_OR_NONE(nodelabel)                                        \
 	IF_ENABLED(DT_NODE_EXISTS(DT_NODELABEL(nodelabel)),                                        \
@@ -39,7 +41,25 @@ static int pinctrl_configure_pin(pinctrl_soc_pin_t soc_pin)
 
 	if (gpios[port] != 0U) {
 
-		if ((func & 0xFF00U) == 0U) {
+		if (func == FIXED_FUNC || func == FIXED_FUNC_PU) {
+			/* Fixed-function pin: configure as digital */
+#if defined(CONFIG_BOARD_DSPIC33A_CURIOSITY_P33AK128MC106)
+			if ((port == PORT_A) || (port == PORT_B)) {
+				volatile uint32_t *ansel =
+					(void *)(gpios[0] + OFFSET_ANSEL + (port * 0x24U));
+				*ansel &= ~(1U << pin);
+			}
+#elif defined(CONFIG_BOARD_DSPIC33A_CURIOSITY_P33AK512MPS512)
+			volatile uint32_t *ansel =
+				(void *)(gpios[0] + OFFSET_ANSEL + (port * 0x24U));
+			*ansel &= ~(1U << pin);
+#endif
+			if (func == FIXED_FUNC_PU) {
+				volatile uint32_t *cnpu =
+					(void *)(CNPU_BASE + (port * CNPU_STRIDE));
+				*cnpu |= (1U << pin);
+			}
+		} else if ((func & 0xFF00U) == 0U) {
 			/* Output Remappable functionality pins */
 			volatile uint32_t reg_shift =
 				((pin  < 4U) ? (0U) : (pin / 4U));

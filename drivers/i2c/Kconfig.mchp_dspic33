@@ -1,0 +1,21 @@
+# Copyright (c) 2025 Microchip Technology Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+config I2C_MCHP_DSPIC33
+	bool "Microchip dsPIC33 I2C driver"
+	default y
+	depends on DT_HAS_MICROCHIP_DSPIC33_I2C_ENABLED
+	help
+	  Enable I2C host and client driver for Microchip dsPIC33 family
+	  microcontrollers. Supports standard (100 kHz), fast (400 kHz),
+	  and fast-plus (1 MHz) bus speeds.
+
+if I2C_MCHP_DSPIC33
+
+config I2C_MCHP_DSPIC33_TRANSFER_TIMEOUT
+	int "dsPIC33 I2C transfer timeout [ms]"
+	default 500
+	help
+	  Timeout in milliseconds for I2C transfer operations.
+
+endif # I2C_MCHP_DSPIC33

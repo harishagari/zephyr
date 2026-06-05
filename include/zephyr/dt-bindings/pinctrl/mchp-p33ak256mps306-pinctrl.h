@@ -42,6 +42,8 @@
 #define PORT_C 2
 #define PORT_D 3
 
+#define FIXED_FUNC      0xFFFFFE
+#define FIXED_FUNC_PU   0xFFFFFD
 
 /* Input Function Macros (for RPINRx register configuration) */
 #define INT1     0x32D5

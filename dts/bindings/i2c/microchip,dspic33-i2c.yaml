@@ -1,0 +1,33 @@
+# Copyright (c) 2025 Microchip Technology Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+description: Microchip dsPIC33 I2C controller
+
+compatible: "microchip,dspic33-i2c"
+
+include: [i2c-controller.yaml, pinctrl-device.yaml]
+
+properties:
+  reg:
+    required: true
+
+  interrupts:
+    required: true
+
+  pinctrl-0:
+    required: true
+
+  pinctrl-names:
+    required: true
+
+  scl-gpios:
+    type: phandle-array
+    description: |
+      GPIO spec for the SCL pin. Used for bus recovery by
+      bit-banging SCL to unstick slaves holding SDA low.
+
+  sda-gpios:
+    type: phandle-array
+    description: |
+      GPIO spec for the SDA pin. Used for bus recovery to
+      monitor SDA state during SCL toggling.

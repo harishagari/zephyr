@@ -125,6 +125,32 @@
 			status = "disabled";
 		};
 
+		i2c0: i2c@1880 {
+			compatible = "microchip,dspic33-i2c";
+			reg = <0x1880 0x50>;
+			interrupts = <85 1>, <86 1>, <87 1>, <88 1>;
+			interrupt-names = "err", "gen", "rx", "tx";
+			interrupt-parent = <&intc0>;
+			pinctrl-0 = <&i2c0_sda_default &i2c0_scl_default>;
+			pinctrl-names = "default";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
+		i2c1: i2c@18D0 {
+			compatible = "microchip,dspic33-i2c";
+			reg = <0x18D0 0x50>;
+			interrupts = <89 1>, <90 1>, <91 1>, <92 1>;
+			interrupt-names = "err", "gen", "rx", "tx";
+			interrupt-parent = <&intc0>;
+			pinctrl-0 = <&i2c1_sda_default &i2c1_scl_default>;
+			pinctrl-names = "default";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+		};
+
 		pinctrl: pin-controller@200 {
 			compatible = "microchip,dspic33-pinctrl";
 			reg = <0x0200 0x37D0>;
@@ -194,6 +220,22 @@
 
 			uart3_rx_default: uart3_rx_default {
 				pinmux = <DSPIC33_PINMUX(PORT_B, 1, U4RX)>;
+			};
+
+			i2c0_sda_default: i2c0_sda_default {
+				pinmux = <DSPIC33_PINMUX(PORT_B, 3, FIXED_FUNC_PU)>;
+			};
+
+			i2c0_scl_default: i2c0_scl_default {
+				pinmux = <DSPIC33_PINMUX(PORT_B, 4, FIXED_FUNC_PU)>;
+			};
+
+			i2c1_sda_default: i2c1_sda_default {
+				pinmux = <DSPIC33_PINMUX(PORT_A, 7, FIXED_FUNC_PU)>;
+			};
+
+			i2c1_scl_default: i2c1_scl_default {
+				pinmux = <DSPIC33_PINMUX(PORT_A, 0, FIXED_FUNC_PU)>;
 			};
 		};
 	};

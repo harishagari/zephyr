@@ -8,6 +8,7 @@ set(SOC_LINKER_SCRIPT
 )
 
 if(CONFIG_SOC_P33AK128MC106)
+  zephyr_sources(p33ak128mc106_config.c)
   zephyr_ld_options(-T "${ZEPHYR_BASE}/soc/microchip/dspic33/dspic33a/p33ak128mc106_regs.ld")
 elseif(CONFIG_SOC_P33AK512MPS512)
   zephyr_ld_options(-T "${ZEPHYR_BASE}/soc/microchip/dspic33/dspic33a/p33ak512mps512_regs.ld")

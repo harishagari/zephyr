@@ -28,10 +28,13 @@
 
 uint32_t i2c_cfg = I2C_SPEED_SET(I2C_SPEED_STANDARD) | I2C_MODE_CONTROLLER;
 
-#define GY271_HMC_ADDR (0x1E)
-#define GY271_QMC_ADDR (0x0D)
+#define GY271_HMC_ADDR  (0x1E)
+#define GY271_QMC_ADDR  (0x0D)
+#define GY271_QMCP_ADDR (0x2C)
 
-#if defined(CONFIG_SENSOR_GY271_QMC)
+#if defined(CONFIG_SENSOR_GY271_QMC_P)
+#define GY271_ADDR GY271_QMCP_ADDR
+#elif defined(CONFIG_SENSOR_GY271_QMC)
 #define GY271_ADDR GY271_QMC_ADDR
 #elif defined(CONFIG_SENSOR_GY271_HMC)
 #define GY271_ADDR GY271_HMC_ADDR
@@ -66,7 +69,21 @@ static int test_gy271(void)
 		return TC_FAIL;
 	}
 
-#ifdef CONFIG_SENSOR_GY271_QMC
+#if defined(CONFIG_SENSOR_GY271_QMC_P)
+	/* QMC5883P: SET/RESET register 0x29, then control reg 0x0A */
+	datas[0] = 0x29;
+	datas[1] = 0x06;
+	if (i2c_write(i2c_dev, datas, 2, GY271_ADDR)) {
+		TC_PRINT("Fail to configure sensor GY271 QMC5883P SET/RESET\n");
+		return TC_FAIL;
+	}
+	datas[0] = 0x0A;
+	datas[1] = 0x29; /* Continuous mode, ODR=200Hz, OSR=512 */
+	if (i2c_write(i2c_dev, datas, 2, GY271_ADDR)) {
+		TC_PRINT("Fail to configure sensor GY271 QMC5883P control\n");
+		return TC_FAIL;
+	}
+#elif defined(CONFIG_SENSOR_GY271_QMC)
 	datas[0] = 0x09;
 	datas[1] = 0x01;
 
@@ -94,7 +111,10 @@ static int test_gy271(void)
 
 	k_sleep(K_MSEC(1));
 
-#ifdef CONFIG_SENSOR_GY271_QMC
+#if defined(CONFIG_SENSOR_GY271_QMC_P)
+	/* QMC5883P data registers start at 0x01 */
+	datas[0] = 0x01;
+#elif defined(CONFIG_SENSOR_GY271_QMC)
 	/* Sensor data bits start from 0x00 to 0x05 */
 	datas[0] = 0x00;
 #else /* GY271 HMC */
@@ -147,7 +167,17 @@ static int test_burst_gy271(void)
 		return TC_FAIL;
 	}
 
-#ifdef CONFIG_SENSOR_GY271_QMC
+#if defined(CONFIG_SENSOR_GY271_QMC_P)
+	/* QMC5883P: burst write SET/RESET + control */
+	datas[0] = 0x06;
+	if (i2c_burst_write(i2c_dev, GY271_ADDR, 0x29, datas, 1)) {
+		TC_PRINT("Fail to configure sensor GY271 QMC5883P SET/RESET\n");
+	}
+	datas[0] = 0x29; /* Continuous mode, ODR=200Hz, OSR=512 */
+	if (i2c_burst_write(i2c_dev, GY271_ADDR, 0x0A, datas, 1)) {
+		TC_PRINT("Fail to configure sensor GY271 QMC5883P control\n");
+	}
+#elif defined(CONFIG_SENSOR_GY271_QMC)
 	datas[0] = 0x09;
 	datas[1] = 0x01;
 
@@ -171,7 +201,10 @@ static int test_burst_gy271(void)
 	(void)memset(datas, 0, sizeof(datas));
 #endif
 
-#ifdef CONFIG_SENSOR_GY271_QMC
+#if defined(CONFIG_SENSOR_GY271_QMC_P)
+	/* QMC5883P data registers start at 0x01 */
+	int start_bit = 0x01;
+#elif defined(CONFIG_SENSOR_GY271_QMC)
 	/* Sensor data bits start from 0x00 to 0x05 */
 	int start_bit = 0x00;
 #else /* GY271 HMC */

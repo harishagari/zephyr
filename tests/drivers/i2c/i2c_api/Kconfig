@@ -15,8 +15,13 @@ choice
 		  Use to enable the use of gy271 HMC sensor
 
 	config SENSOR_GY271_QMC
-		bool "Use gy271 QMC type sensor"
+		bool "Use gy271 QMC5883L type sensor (addr 0x0D)"
 		help
-		  Use to enable the use of gy271 QMC sensor
+		  Use to enable the use of gy271 QMC5883L sensor
+
+	config SENSOR_GY271_QMC_P
+		bool "Use gy271 QMC5883P type sensor (addr 0x2C)"
+		help
+		  Use to enable the use of gy271 QMC5883P sensor
 
 endchoice

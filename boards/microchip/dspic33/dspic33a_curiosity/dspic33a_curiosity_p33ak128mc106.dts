@@ -61,6 +61,8 @@
 		uart-0 = &uart0;
 		uart-1 = &uart1;
 		uart-2 = &uart2;
+		i2c-0 = &i2c0;
+		i2c-1 = &i2c1;
 		led0 = &led0;
 		led1 = &led1;
 		led2 = &led2;
@@ -92,4 +94,12 @@
 
 &uart2 {
 	status = "okay";
+};
+
+&i2c0 {
+	status = "okay";
+};
+
+&i2c1 {
+	status = "disabled";
 };

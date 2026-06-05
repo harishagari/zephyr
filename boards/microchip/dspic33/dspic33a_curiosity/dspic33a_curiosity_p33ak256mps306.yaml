@@ -10,6 +10,7 @@ supported:
   - uart
   - timer
   - gpio
+  - i2c
 testing:
   default: true
 vendor: microchip
